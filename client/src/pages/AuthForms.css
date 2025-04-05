@@ -1,0 +1,42 @@
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh;
+}
+
+.auth-wrapper {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 450px;
+}
+
+.auth-wrapper h1 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 1rem;
+  color: var(--primary-color);
+}
+
+.auth-intro {
+  margin-bottom: 2rem;
+  color: #666;
+}
+
+.btn-block {
+  width: 100%;
+}
+
+.auth-redirect {
+  text-align: center;
+  margin-top: 1.5rem;
+}
+
+.auth-redirect a {
+  color: var(--primary-color);
+  font-weight: 600;
+}

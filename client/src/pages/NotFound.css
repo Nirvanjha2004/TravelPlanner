@@ -1,0 +1,21 @@
+.not-found {
+  text-align: center;
+  padding: 5rem 2rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.not-found-icon {
+  font-size: 5rem;
+  color: var(--danger-color);
+  margin-bottom: 2rem;
+}
+
+.not-found h1 {
+  margin-bottom: 1rem;
+}
+
+.not-found p {
+  margin-bottom: 2rem;
+  color: #666;
+}
