@@ -3,6 +3,7 @@ import { lazy, Suspense } from 'react';
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 import PrivateRoute from './components/routing/PrivateRoute';
+import PublicRoute from './components/routing/PublicRoute';
 import TestRegister from './pages/TestRegister';
 
 // Lazy load pages for better performance
@@ -17,7 +18,7 @@ const NotFound = lazy(() => import('./pages/NotFound'));
 const Explore = lazy(() => import('./pages/Explore'));
 const Categories = lazy(() => import('./pages/Categories'));
 const Destinations = lazy(() => import('./pages/Destinations'));
-const MapExplore = lazy(() => import('./pages/MapExplore')); // Add the new import
+const MapExplore = lazy(() => import('./pages/MapExplore'));
 
 function App() {
   return (
@@ -31,8 +32,16 @@ function App() {
         }>
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
+            <Route path="/login" element={
+              <PublicRoute>
+                <Login />
+              </PublicRoute>
+            } />
+            <Route path="/register" element={
+              <PublicRoute>
+                <Register />
+              </PublicRoute>
+            } />
             <Route path="/experience/:id" element={<ExperienceDetails />} />
             <Route path="/profile" element={<PrivateRoute><Profile /></PrivateRoute>} />
             <Route path="/profile/:userId" element={<Profile />} />
@@ -41,8 +50,14 @@ function App() {
             <Route path="/explore" element={<Explore />} />
             <Route path="/categories" element={<Categories />} />
             <Route path="/destinations" element={<Destinations />} />
-            <Route path="/map" element={<MapExplore />} /> {/* Add the new route */}
-            <Route path="/test-register" element={<TestRegister />} /> {/* Add the new route */}
+            <Route path="/map" element={<MapExplore />} />
+            {process.env.NODE_ENV === 'development' && (
+              <Route path="/test-register" element={
+                <PublicRoute>
+                  <TestRegister />
+                </PublicRoute>
+              } />
+            )}
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>
