@@ -3,6 +3,7 @@ import { lazy, Suspense } from 'react';
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 import PrivateRoute from './components/routing/PrivateRoute';
+import TestRegister from './pages/TestRegister';
 
 // Lazy load pages for better performance
 const Home = lazy(() => import('./pages/Home'));
@@ -41,6 +42,7 @@ function App() {
             <Route path="/categories" element={<Categories />} />
             <Route path="/destinations" element={<Destinations />} />
             <Route path="/map" element={<MapExplore />} /> {/* Add the new route */}
+            <Route path="/test-register" element={<TestRegister />} /> {/* Add the new route */}
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>

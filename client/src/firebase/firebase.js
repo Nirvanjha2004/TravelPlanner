@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
+import { getAuth, connectAuthEmulator } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 
 const firebaseConfig = {
@@ -10,12 +10,17 @@ const firebaseConfig = {
     messagingSenderId: "723317032655",
     appId: "1:723317032655:web:ef33ea3ce5fd5138f319ba",
     measurementId: "G-BDHJ1PW01Y"
-  };
+};
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
+
+// Debug mode - remove in production
+if (process.env.NODE_ENV === 'development') {
+  console.log("Firebase initialized with project:", firebaseConfig.projectId);
+}
 
 export { auth, db };
 export default app;

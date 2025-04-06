@@ -22,6 +22,7 @@ export const AuthProvider = ({ children }) => {
   // Register user
   const register = async (name, email, password) => {
     try {
+      // First check if Email/Password authentication is enabled in Firebase Console
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       
       // Add display name
@@ -42,7 +43,20 @@ export const AuthProvider = ({ children }) => {
       toast.success('Registration successful!');
       return userCredential.user;
     } catch (error) {
-      toast.error(error.message);
+      console.error("Registration error:", error);
+      
+      // Handle specific Firebase errors with user-friendly messages
+      if (error.code === 'auth/admin-restricted-operation') {
+        toast.error('Registration is currently disabled. Please try again later or contact support.');
+      } else if (error.code === 'auth/email-already-in-use') {
+        toast.error('This email is already registered. Try logging in instead.');
+      } else if (error.code === 'auth/invalid-email') {
+        toast.error('Please provide a valid email address.');
+      } else if (error.code === 'auth/weak-password') {
+        toast.error('Password is too weak. Use at least 6 characters.');
+      } else {
+        toast.error('Registration failed. Please try again.');
+      }
       throw error;
     }
   };
@@ -54,7 +68,18 @@ export const AuthProvider = ({ children }) => {
       toast.success('Login successful!');
       return userCredential.user;
     } catch (error) {
-      toast.error('Invalid email or password');
+      console.error("Login error:", error);
+      
+      // Handle specific Firebase errors
+      if (error.code === 'auth/admin-restricted-operation') {
+        toast.error('Login is currently disabled. Please try again later or contact support.');
+      } else if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
+        toast.error('Invalid email or password');
+      } else if (error.code === 'auth/too-many-requests') {
+        toast.error('Too many failed login attempts. Please try again later.');
+      } else {
+        toast.error('Login failed. Please try again.');
+      }
       throw error;
     }
   };
