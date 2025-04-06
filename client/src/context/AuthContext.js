@@ -19,44 +19,66 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Register user
+  // Register user - Updated to match the working test implementation
   const register = async (name, email, password) => {
     try {
-      // First check if Email/Password authentication is enabled in Firebase Console
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      console.log("Attempting to register with:", email);
       
-      // Add display name
+      // First create the user
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      console.log("User created successfully", userCredential.user.uid);
+      
+      // Then update the profile with displayName
       await updateProfile(userCredential.user, {
         displayName: name
       });
+      console.log("Profile updated with name:", name);
       
-      // Add user to Firestore
-      await setDoc(doc(db, 'users', userCredential.user.uid), {
+      // Finally create a user document in Firestore
+      const userData = {
         name,
         email,
         profilePicture: `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}`,
         bio: '',
         location: '',
         createdAt: new Date().toISOString()
+      };
+      
+      await setDoc(doc(db, 'users', userCredential.user.uid), userData);
+      console.log("User document created in Firestore");
+      
+      // Update the local user state
+      setUser({
+        uid: userCredential.user.uid,
+        email: userCredential.user.email,
+        displayName: name,
+        ...userData
       });
       
       toast.success('Registration successful!');
       return userCredential.user;
     } catch (error) {
-      console.error("Registration error:", error);
+      console.error("Registration error:", error.code, error.message);
       
       // Handle specific Firebase errors with user-friendly messages
-      if (error.code === 'auth/admin-restricted-operation') {
-        toast.error('Registration is currently disabled. Please try again later or contact support.');
-      } else if (error.code === 'auth/email-already-in-use') {
-        toast.error('This email is already registered. Try logging in instead.');
-      } else if (error.code === 'auth/invalid-email') {
-        toast.error('Please provide a valid email address.');
-      } else if (error.code === 'auth/weak-password') {
-        toast.error('Password is too weak. Use at least 6 characters.');
-      } else {
-        toast.error('Registration failed. Please try again.');
+      switch(error.code) {
+        case 'auth/email-already-in-use':
+          toast.error('This email is already registered. Try logging in instead.');
+          break;
+        case 'auth/invalid-email':
+          toast.error('Please provide a valid email address.');
+          break;
+        case 'auth/weak-password':
+          toast.error('Password is too weak. Use at least 6 characters.');
+          break;
+        case 'auth/operation-not-allowed':
+        case 'auth/admin-restricted-operation':
+          toast.error('Email/password registration is not enabled. Please use another method.');
+          break;
+        default:
+          toast.error(`Registration failed: ${error.message}`);
       }
+      
       throw error;
     }
   };

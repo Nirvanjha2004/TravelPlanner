@@ -34,7 +34,7 @@ const Register = () => {
     }
     
     if (password !== confirmPassword) {
-      toast.error('Passwords do not match');
+      toast.error("Passwords don't match");
       return;
     }
     
@@ -45,10 +45,12 @@ const Register = () => {
     
     try {
       setIsLoading(true);
-      await register({ name, email, password });
+      console.log("Submitting registration form:", { name, email });
+      await register(name, email, password);
       toast.success('Registration successful!');
-      navigate('/');
+      navigate('/login');
     } catch (error) {
+      console.error("Registration error in component:", error);
       toast.error(error.response?.data?.message || 'Registration failed');
     } finally {
       setIsLoading(false);
