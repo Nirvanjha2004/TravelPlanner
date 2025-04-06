@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import 'leaflet/dist/leaflet.css';
 
+// Create a Map component that only renders on client-side 
 const LocationMap = ({ 
   location, 
   height = '300px', 
@@ -13,6 +14,7 @@ const LocationMap = ({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isClient, setIsClient] = useState(false);
+  const [mapComponent, setMapComponent] = useState(null);
   
   // Check if we're in the browser
   useEffect(() => {
@@ -62,7 +64,58 @@ const LocationMap = ({
     }
   }, [location]);
 
-  // Use static map instead of dynamic component
+  // Dynamically import and render the map component
+  useEffect(() => {
+    if (!isClient) return;
+
+    const loadMap = async () => {
+      try {
+        const L = await import('leaflet');
+        const { MapContainer, TileLayer, Marker, Popup } = await import('react-leaflet');
+
+        const icon = L.icon({
+          iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
+          iconRetinaUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png',
+          shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
+          iconSize: [25, 41],
+          iconAnchor: [12, 41],
+          popupAnchor: [1, -34],
+          shadowSize: [41, 41]
+        });
+
+        const locationName = location?.city ? 
+          `${location.city}, ${location.country}` : 
+          location?.country || "Unknown location";
+
+        const Map = () => (
+          <MapContainer 
+            center={coords} 
+            zoom={zoom} 
+            style={{ height, width }}
+            className={`rounded-lg border border-gray-200 ${className}`}
+          >
+            <TileLayer
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            />
+            <Marker position={coords} icon={icon}>
+              {popup && <Popup>{locationName}</Popup>}
+            </Marker>
+          </MapContainer>
+        );
+
+        setMapComponent(<Map />);
+        setLoading(false);
+      } catch (err) {
+        console.error('Failed to load map:', err);
+        setError('Failed to load map component');
+        setLoading(false);
+      }
+    };
+
+    loadMap();
+  }, [coords, isClient, height, width, zoom, className, location, popup]);
+
   if (!isClient || loading) {
     return (
       <div 
@@ -85,34 +138,12 @@ const LocationMap = ({
     );
   }
 
-  // Use a static image map or iframe if dynamic import doesn't work
-  const locationText = location?.city ? 
-    `${location.city}, ${location.country}` : 
-    location?.country || "Unknown location";
-
-  const encodedLocation = encodeURIComponent(locationText);
-  
-  // Return a static OpenStreetMap image
-  return (
+  return mapComponent || (
     <div 
-      className={`rounded-lg border border-gray-200 relative ${className}`}
+      className={`bg-gray-100 flex items-center justify-center ${className}`}
       style={{ height, width }}
     >
-      <iframe 
-        width="100%" 
-        height="100%" 
-        frameBorder="0" 
-        scrolling="no" 
-        marginHeight="0" 
-        marginWidth="0" 
-        src={`https://www.openstreetmap.org/export/embed.html?bbox=${coords[1]-0.01}%2C${coords[0]-0.01}%2C${coords[1]+0.01}%2C${coords[0]+0.01}&layer=mapnik&marker=${coords[0]}%2C${coords[1]}`}
-        className="rounded-lg"
-      ></iframe>
-      {popup && (
-        <div className="absolute bottom-2 left-2 bg-white px-2 py-1 rounded shadow-sm text-sm">
-          {locationText}
-        </div>
-      )}
+      <p className="text-gray-400">Initializing map...</p>
     </div>
   );
 };
