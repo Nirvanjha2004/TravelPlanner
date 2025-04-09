@@ -10,7 +10,13 @@
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "install-client-deps": "cd client && npm install",
     "install-all": "npm install && npm run install-client-deps",
-    "build": "cd client && npm run build"
+    "build": "cd client && npm run build",
+    "deploy": "firebase deploy",
+    "deploy:hosting": "firebase deploy --only hosting",
+    "deploy:rules": "firebase deploy --only firestore:rules",
+    "firebase-init": "firebase init",
+    "ci": "npm ci && cd client && npm ci",
+    "ci:build": "cd client && npm run build"
   },
   "keywords": [
     "travel",
