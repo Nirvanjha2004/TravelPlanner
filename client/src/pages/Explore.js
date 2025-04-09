@@ -1,9 +1,8 @@
-import { useState, useEffect } from 'react';
-import { Search, Filter, MapPin, Bookmark } from 'lucide-react';
+import { useState } from 'react';
+import { Search, Filter, MapPin } from 'lucide-react';
 import { Button } from '../components/ui/button';
-import { Card, CardContent, CardFooter } from '../components/ui/card';
+import { Card, CardContent } from '../components/ui/card';
 import { Separator } from '../components/ui/separator';
-import { Badge } from '../components/ui/badge';
 import ExperienceCard from '../components/experiences/ExperienceCard';
 import { dummyExperiences, unsplashImages } from '../lib/utils';
 

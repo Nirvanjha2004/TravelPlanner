@@ -1,10 +1,8 @@
 import { useState, useEffect } from 'react';
-import { Search, ArrowRight } from 'lucide-react';
+import { Search } from 'lucide-react';
 import { Button } from '../components/ui/button';
-import { Card } from '../components/ui/card';
-import { Badge } from '../components/ui/badge';
 import ExperienceCard from '../components/experiences/ExperienceCard';
-import { unsplashImages, dummyExperiences, getUnsplashImageByTerm } from '../lib/utils';
+import { unsplashImages, dummyExperiences } from '../lib/utils';
 import { Link } from 'react-router-dom';
 
 const Categories = () => {

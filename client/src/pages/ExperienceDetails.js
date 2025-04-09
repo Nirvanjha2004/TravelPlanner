@@ -4,7 +4,6 @@ import {
   Heart, MapPin, Calendar, DollarSign, Star, Edit, Trash2, Tag, User as UserIcon, 
   Share2, Bookmark, BookmarkCheck, Copy, Check, ExternalLink, Camera, MessageCircle
 } from 'lucide-react';
-import api from '../utils/api';
 import { useAuth } from '../context/AuthContext';
 import { toast } from 'react-toastify';
 import { Avatar, AvatarFallback, AvatarImage } from '../components/ui/avatar';
@@ -25,7 +24,6 @@ const ExperienceDetails = () => {
   const [isLiked, setIsLiked] = useState(false);
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState('');
-  const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [submittingComment, setSubmittingComment] = useState(false);
   
   // Add state for new functionality

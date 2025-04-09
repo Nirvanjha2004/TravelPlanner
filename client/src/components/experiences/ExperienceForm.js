@@ -1,15 +1,14 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 import { toast } from 'react-toastify';
-import { Loader2, Plus, X, Upload, Calendar as CalendarIcon, Star } from 'lucide-react';
-import { format } from 'date-fns';
+import { X, Upload, MapPin, Calendar, DollarSign } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 import { Textarea } from '../ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 import { Separator } from '../ui/separator';
-import api from '../../utils/api';
 import { getRandomImage, unsplashImages } from '../../lib/utils';
 
 const ExperienceForm = ({ experience = null }) => {
@@ -421,7 +420,7 @@ const ExperienceForm = ({ experience = null }) => {
                 onChange={handleChange}
                 className="pl-10"
               />
-              <CalendarIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
+              <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
             </div>
           </div>
           <div className="space-y-1">
@@ -435,7 +434,7 @@ const ExperienceForm = ({ experience = null }) => {
                 onChange={handleChange}
                 className="pl-10"
               />
-              <CalendarIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
+              <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
             </div>
           </div>
         </div>

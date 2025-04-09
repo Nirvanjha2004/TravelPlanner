@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import api from '../utils/api';
-import ExperienceForm from '../components/experiences/ExperienceForm';
 import { useAuth } from '../context/AuthContext';
+import ExperienceForm from '../components/experiences/ExperienceForm';
 import { dummyExperiences } from '../lib/utils';
 
 const EditExperience = () => {

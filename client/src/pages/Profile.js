@@ -2,9 +2,8 @@ import { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { toast } from 'react-toastify';
-import api from '../utils/api';
 import { 
-  Pencil, MapPin, Mail, Loader2, Plus, Calendar, Settings, AtSign, 
+  Pencil, MapPin, Mail, Loader2, Plus, Calendar, Settings, 
   Globe, Instagram, Twitter, Facebook, ExternalLink, PieChart
 } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '../components/ui/avatar';
@@ -17,7 +16,6 @@ import { Textarea } from '../components/ui/textarea';
 import { Separator } from '../components/ui/separator';
 import ExperienceCard from '../components/experiences/ExperienceCard';
 import { dummyExperiences, dummyUsers } from '../lib/utils';
-import { Badge } from '../components/ui/badge';
 
 const Profile = () => {
   const { userId } = useParams(); // Get userId from URL if present
@@ -242,15 +240,15 @@ const Profile = () => {
               </div>
               
               <div className="flex space-x-3 mt-2">
-                <a href="#" className="text-gray-500 hover:text-[#1DA1F2]">
+                <button className="text-gray-500 hover:text-[#1DA1F2]">
                   <Twitter className="h-5 w-5" />
-                </a>
-                <a href="#" className="text-gray-500 hover:text-[#E4405F]">
+                </button>
+                <button className="text-gray-500 hover:text-[#E4405F]">
                   <Instagram className="h-5 w-5" />
-                </a>
-                <a href="#" className="text-gray-500 hover:text-[#1877F2]">
+                </button>
+                <button className="text-gray-500 hover:text-[#1877F2]">
                   <Facebook className="h-5 w-5" />
-                </a>
+                </button>
               </div>
             </div>
           </Card>
