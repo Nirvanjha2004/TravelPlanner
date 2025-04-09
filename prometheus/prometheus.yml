@@ -1,0 +1,9 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: 'travel-planner'
+    static_configs:
+      - targets: ['app:6000']  # Using the service name from docker-compose
+    metrics_path: /metrics
