@@ -3,6 +3,8 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const path = require('path');
+const client = require('prom-client');
+const requestCountMiddleware = require('./metrics/requestCount');
 
 // Load environment variables
 dotenv.config();
@@ -14,6 +16,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(requestCountMiddleware);
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGODB_URI)
@@ -33,6 +36,18 @@ if (process.env.NODE_ENV === 'production') {
     res.sendFile(path.resolve(__dirname, '../client/build', 'index.html'));
   });
 }
+
+// Metrics endpoint - Update to use the correct register
+app.get("/metrics", async (req, res) => {
+  try {
+    const metrics = await requestCountMiddleware.register.metrics();
+    res.set('Content-Type', requestCountMiddleware.register.contentType);
+    res.end(metrics);
+  } catch (error) {
+    console.error('Error generating metrics:', error);
+    res.status(500).send('Error generating metrics');
+  }
+});
 
 // Start server
 const PORT = process.env.PORT || 6000;
